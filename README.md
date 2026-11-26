@@ -148,7 +148,7 @@ medusa -h 192.168.85.131 -U user.txt -P pass.txt -M smbnt
 ### ✅ Resultado
 O Medusa validou a credencial **`msfadmin` / `msfadmin`**, obtendo acesso ao compartilhamento administrativo (`[SUCCESS (ADMIN$ - Access Allowed)]`).
 
-![Resultado Medusa SMB](images/medusa_smb.jpg)
+![Resultado Medusa SMB](images/medusa_smb.png)
 
 ### 📘 Conceito de Password Spraying
 Diferente da força bruta tradicional (que testa milhares de senhas contra um único usuário), o **Password Spraying** consiste em testar poucas senhas comuns contra várias contas diferentes, reduzindo o risco de bloqueio de conta (*account lockout*) e explorando a reutilização de credenciais fracas.
