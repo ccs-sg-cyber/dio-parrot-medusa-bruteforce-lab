@@ -1,16 +1,16 @@
 # 🛡️ Laboratório de Ataques de Força Bruta com Parrot OS, Medusa e Hydra
 
-Projeto educacional executado em ambiente controlado para aprendizado de técnicas de cibersegurança ofensiva, com foco em varredura de rede, enumeração de serviços, criação de wordlists e ataques de força bruta (Brute Force).
+Projeto educacional executado em ambiente controlado para aprendizado de técnicas de cibersegurança ofensiva, com foco em varredura de rede, enumeração de serviços, criação de wordlists e ataques de força bruta (Brute Force e Password Spraying).
 
 ## 🧠 Sobre o Projeto
 
 Este laboratório foi desenvolvido como parte do **Bootcamp de Cibersegurança na Digital Innovation One (DIO)**.
 
 Os principais objetivos deste projeto são:
-- Realizar a varredura da rede e enumeração de serviços ativos utilizando o **Nmap**;
+- Realizar a varredura da rede e enumeração de serviços e usuários ativos utilizando **Nmap** e **Enum4linux**;
 - Analisar o comportamento de formulários web (DVWA) e mapear seus parâmetros de requisição;
 - Criar wordlists personalizadas no terminal Linux;
-- Executar ataques de força bruta automatizados utilizando **Medusa** (FTP) e **Hydra** (HTTP POST Form);
+- Executar ataques de força bruta e *password spraying* automatizados utilizando **Medusa** (FTP e SMB) e **Hydra** (HTTP POST Form);
 - Documentar processos técnicos e evidências de forma estruturada no GitHub.
 
 > ⚠️ **Aviso Ético:** Todos os testes descritos neste repositório foram realizados exclusivamente em ambientes isolados, vulneráveis e autorizados (Metasploitable 2 e DVWA). Nenhum ataque foi executado contra sistemas reais ou externos.
@@ -125,6 +125,36 @@ O Hydra realizou as tentativas de combinação e identificou rapidamente a crede
 
 ---
 
+## 🗂️ 5. Password Spraying em SMB (Enum4linux + Medusa)
+
+### 🔎 Enumeração de Usuários
+Antes de iniciar o ataque no serviço SMB (portas `139` e `445`), realizou-se a enumeração de usuários válidos do sistema utilizando o `enum4linux` e salvando a saída em arquivo com `tee`:
+
+```bash
+enum4linux -U 192.168.85.131 | tee enumeracao_smb.txt
+```
+
+A varredura retornou diversas contas locais e de serviço do servidor (incluindo `user`, `root`, `msfadmin`, `postgres`, `service`, `tomcat55`, entre outras).
+
+![Enumeração de usuários SMB](images/enum4linux_smb.png)
+
+### ▶️ Execução com Medusa
+Com os usuários validados na enumeração, executou-se o ataque no módulo `smbnt` do **Medusa**:
+
+```bash
+medusa -h 192.168.85.131 -U user.txt -P pass.txt -M smbnt
+```
+
+### ✅ Resultado
+O Medusa validou a credencial **`msfadmin` / `msfadmin`**, obtendo acesso ao compartilhamento administrativo (`[SUCCESS (ADMIN$ - Access Allowed)]`).
+
+![Resultado Medusa SMB](images/medusa_smb.jpg)
+
+### 📘 Conceito de Password Spraying
+Diferente da força bruta tradicional (que testa milhares de senhas contra um único usuário), o **Password Spraying** consiste em testar poucas senhas comuns contra várias contas diferentes, reduzindo o risco de bloqueio de conta (*account lockout*) e explorando a reutilização de credenciais fracas.
+
+---
+
 ## 📁 Estrutura do Repositório
 
 ```text
@@ -135,7 +165,9 @@ dio-parrot-medusa-bruteforce-lab/
 │   ├── nmap.png
 │   ├── metasploitable.png
 │   ├── dvwa-request.png
-│   └── hydra-dvwa.png
+│   ├── hydra-dvwa.png
+│   ├── enum4linux_smb.png
+│   └── medusa_smb.jpg
 └── wordlists/
     ├── user.txt
     └── pass.txt
@@ -145,7 +177,7 @@ dio-parrot-medusa-bruteforce-lab/
 
 ## 📘 Conclusões e Aprendizados
 
-Este laboratório proporcionou experiência prática na execução de varreduras de rede, criação de wordlists e testes de força bruta em ambiente controlado. Além do uso das ferramentas (**Nmap**, **Medusa** e **Hydra**), a análise do tráfego HTTP demonstrou como mapear parâmetros de formulários (`POST`) e a importância de compreender o funcionamento dos protocolos (como códigos de redirecionamento `302`) para escolher a ferramenta adequada a cada cenário.
+Este laboratório proporcionou experiência prática na execução de varreduras de rede, enumeração de usuários, criação de wordlists e testes de força bruta em ambiente controlado. Além do domínio das ferramentas (**Nmap**, **Enum4linux**, **Medusa** e **Hydra**), a prática demonstrou como mapear formulários HTTP (`POST`) e a importância de compreender o comportamento dos protocolos (como redirecionamentos `302` e compartilhamentos SMB) para escolher a abordagem adequada a cada serviço.
 
 ---
 
