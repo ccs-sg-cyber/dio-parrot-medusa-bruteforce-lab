@@ -191,5 +191,5 @@ Este laboratório proporcionou experiência prática na execução de varreduras
 
 ---
 
-✍️ **Autor:** [Seu Nome Aqui]  
+✍️ **Autor:** [CCS_CYBER]  
 📌 *Projeto educacional desenvolvido para o Bootcamp da Digital Innovation One (DIO).*
