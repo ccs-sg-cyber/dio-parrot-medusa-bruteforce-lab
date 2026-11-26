@@ -167,7 +167,7 @@ dio-parrot-medusa-bruteforce-lab/
 │   ├── dvwa-request.png
 │   ├── hydra-dvwa.png
 │   ├── enum4linux_smb.png
-│   └── medusa_smb.jpg
+│   └── medusa_smb.png
 └── wordlists/
     ├── user.txt
     └── pass.txt
